@@ -1,6 +1,6 @@
 package modelos;
 
-public class Producto {
+public abstract class Producto {
     private Integer ID;
     private String nombre;
 
