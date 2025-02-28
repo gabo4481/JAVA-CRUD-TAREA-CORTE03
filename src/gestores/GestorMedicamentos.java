@@ -4,6 +4,7 @@ import modelos.Medicamento;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class GestorMedicamentos {
     private ArrayList<Medicamento> medicamentos;
@@ -16,7 +17,7 @@ public class GestorMedicamentos {
 
     public void crearMedicamento(int ID) {
         try {
-            System.out.println("Ingresa Nombre del modelos.Medicamento: ");
+            System.out.println("Ingresa Nombre del medicamento: ");
             String nombre = lectura.nextLine();
 
             System.out.println("Ingresa Principio Activo: ");
@@ -52,8 +53,8 @@ public class GestorMedicamentos {
         lectura.nextLine();
 
         for(Medicamento medicamento : medicamentos){
-            if(medicamento.getID().equals(eleccionID)){
-                System.out.println("Ingresa nuevo Nombre del modelos.Medicamento: ");
+            if (medicamento.getID() == eleccionID) {
+                System.out.println("Ingresa nuevo Nombre del medicamento: ");
                 String nombre = lectura.nextLine();
                 medicamento.setNombre(nombre);
 
@@ -82,12 +83,26 @@ public class GestorMedicamentos {
         int eleccionIDBorrado = lectura.nextInt();
         lectura.nextLine();
 
-        if (medicamentos.removeIf(m -> m.getID().equals(eleccionIDBorrado))) {
-            System.out.println("modelos.Medicamento eliminado correctamente.");
+            if (medicamentos.removeIf(m -> m.getID() == eleccionIDBorrado)) {
+            System.out.println("Medicamento eliminado correctamente.");
         } else {
             System.out.println("No se encontró un medicamento con el ID ingresado.");
         }
     }
 
+    public void stockBajo(int umbral) {
+        medicamentos.stream()
+                .filter(m -> m.getCantidad() < umbral)
+                .forEach(m -> System.out.println(m.getID()+". "+m.getNombre()+" - cantidad: "+m.getCantidad()));
+    }
 
+
+    public void stockPorLaboratorio() {
+        medicamentos.stream()
+                .collect(Collectors.groupingBy(
+                        Medicamento::getLaboratorio,
+                        Collectors.summarizingInt(Medicamento::getCantidad)
+                ))
+                .forEach((laboratorio,cantidad)-> System.out.println(laboratorio+" - cantidad: "+cantidad.getSum()));
+    }
 }

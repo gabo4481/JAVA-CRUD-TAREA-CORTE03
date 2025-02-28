@@ -14,6 +14,8 @@ public class Main {
             System.out.println("2. Mostrar medicamentos");
             System.out.println("3. Editar un medicamento");
             System.out.println("4. Eliminar un medicamento");
+            System.out.println("5. Medicamentos con stock bajo");
+            System.out.println("6. Medicamentos con stock por laboratorio");
             System.out.println("0. Salir");
             System.out.println("*******************************************************");
 
@@ -35,6 +37,15 @@ public class Main {
                 case 4:
                     gestor.eliminarMedicamento();
                     break;
+                case 5:
+                    System.out.println("Ingresa la cantidad maxima de medicamentos: ");
+                    int umbral = lectura.nextInt();
+                    lectura.nextLine();
+                    gestor.stockBajo(umbral);
+                    break;
+                case 6:
+                    gestor.stockPorLaboratorio();
+                    break;
                 case 0:
                     condicion = false;
                     break;
@@ -42,12 +53,4 @@ public class Main {
             }
         }
     }
-
-
-
-
-
-
-
-
 }
