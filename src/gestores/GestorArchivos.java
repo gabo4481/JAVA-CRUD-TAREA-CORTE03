@@ -50,7 +50,7 @@ public class GestorArchivos {
 
     public void guardarDatos(ArrayList<Medicamento> medicamentos){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))){
-            oos.writeObject(this.medicamentos);
+            oos.writeObject(medicamentos);
             System.out.println("Datos guardados correctamente");
         } catch (IOException e) {
             System.out.println("Error al guardar los datos: "+e.getMessage());
