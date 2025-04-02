@@ -1,0 +1,4 @@
+Nombre del reporte: reporte01
+1. acet - cantidad: 24
+2. ibu - cantidad: 23
+3. christine - cantidad: 2

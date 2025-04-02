@@ -2,7 +2,9 @@ package modelos;
 
 import interfaces.Informacion;
 
-public class Medicamento extends Producto implements Informacion {
+import java.io.Serializable;
+
+public class Medicamento extends Producto implements Informacion,Serializable {
     private String principioActivo;
     private Integer cantidad;
     private String laboratorio;
@@ -42,5 +44,10 @@ public class Medicamento extends Producto implements Informacion {
     public void mostrarInformacion() {
         System.out.println("Medicamento ID: " + getID() + ", Nombre: " + getNombre() + ", Principio Activo: " + principioActivo +
                 ", Cantidad: " + cantidad + ", Laboratorio: " + laboratorio);
+    }
+
+    @Override
+    public String mostrarInformacionReporte01(){
+        return getID()+". "+getNombre()+" - cantidad: "+getCantidad();
     }
 }

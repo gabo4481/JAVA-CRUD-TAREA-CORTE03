@@ -2,17 +2,31 @@ package gestores;
 
 import modelos.Medicamento;
 
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
 
 public class GestorMedicamentos {
     private ArrayList<Medicamento> medicamentos;
     private Scanner lectura;
+    private GestorArchivos gestorArchivos = new GestorArchivos();
 
-    public GestorMedicamentos() {
-        this.medicamentos = new ArrayList();
+
+    public GestorMedicamentos(GestorArchivos gestorArchivos) {
+        this.gestorArchivos = gestorArchivos;
+        this.medicamentos = gestorArchivos.getMedicamentos();
         this.lectura = new Scanner(System.in);
+    }
+
+    public int obtenerIDMax(){
+        if (medicamentos.isEmpty()){
+            return 0;
+        }
+
+        return medicamentos.stream().mapToInt(Medicamento::getID).max().orElse(0);
     }
 
     public void crearMedicamento(int ID) {
@@ -91,18 +105,54 @@ public class GestorMedicamentos {
     }
 
     public void stockBajo(int umbral) {
-        medicamentos.stream()
+        List<String> reporte = medicamentos.stream()
                 .filter(m -> m.getCantidad() < umbral)
-                .forEach(m -> System.out.println(m.getID()+". "+m.getNombre()+" - cantidad: "+m.getCantidad()));
+                .map(Medicamento::mostrarInformacionReporte01)
+                .toList();
+
+        SolicitudGuardado(reporte);
     }
 
 
     public void stockPorLaboratorio() {
-        medicamentos.stream()
+        List<String> reporte = medicamentos.stream()
                 .collect(Collectors.groupingBy(
                         Medicamento::getLaboratorio,
                         Collectors.summarizingInt(Medicamento::getCantidad)
                 ))
-                .forEach((laboratorio,cantidad)-> System.out.println(laboratorio+" - cantidad: "+cantidad.getSum()));
+                .entrySet().stream()
+                .map(entry -> entry.getKey() + " - cantidad: " + entry.getValue().getSum())
+                .collect(Collectors.toList());
+
+        SolicitudGuardado(reporte);
+    }
+
+    private void SolicitudGuardado(List<String> reporte) {
+        for (String linea : reporte){
+            System.out.println(linea);
+        }
+
+        System.out.println("¿Deseas guardar el reporte? 1.SI 2.NO");
+        int respuesta;
+        while (true) {
+            if (lectura.hasNextInt()) {
+                respuesta = lectura.nextInt();
+                lectura.nextLine();
+                if (respuesta == 1 || respuesta == 2) break;
+            } else {
+                lectura.next();
+            }
+            System.out.println("Opción inválida. Ingresa 1 para SI o 2 para NO.");
+        }
+
+        if (respuesta == 1) {
+            String nombre;
+            do {
+                System.out.println("Ingresa el nombre del archivo (sin .txt):");
+                nombre = lectura.nextLine().trim();
+            } while (nombre.isEmpty());
+
+            gestorArchivos.guardarReporte(nombre,reporte);
+        }
     }
 }

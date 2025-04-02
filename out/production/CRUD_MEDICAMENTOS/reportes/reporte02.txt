@@ -1,0 +1,3 @@
+Nombre del reporte: reporte02
+oftalmi - cantidad: 23
+laproff - cantidad: 26

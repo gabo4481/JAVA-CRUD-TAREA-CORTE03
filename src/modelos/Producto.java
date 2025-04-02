@@ -1,8 +1,11 @@
 package modelos;
 
-public abstract class Producto {
+import java.io.Serializable;
+
+public abstract class Producto implements Serializable {
     private Integer ID;
     private String nombre;
+    private static final long serialVersionUID = 1L;
 
     public Producto(Integer ID, String nombre) {
         this.ID = ID;
